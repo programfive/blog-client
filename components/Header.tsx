@@ -1,7 +1,13 @@
 import Link from "next/link";
 import menuLinks from "@/data/menu";
 import SocialSharing from "./SocialSharing";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 export default function Header() {
   return (
@@ -18,7 +24,7 @@ export default function Header() {
         </div>
         <Sheet>
           <SheetTrigger aria-labelledby="button-label">
-            <span id="button-label" hidden>
+            <span id="button-label" className="sr-only" hidden>
               Menu
             </span>
             <svg
@@ -40,6 +46,9 @@ export default function Header() {
             className="w-full pt-14"
             aria-label="Menu Toggle"
           >
+            <SheetHeader>
+              <SheetTitle>Categories</SheetTitle>
+            </SheetHeader>
             <nav
               className="flex flex-col flex-1 justify-end gap-6"
               aria-labelledby="mobile-nav"

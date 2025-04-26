@@ -6,7 +6,7 @@ import news from "@/json/news.json";
 
 export default function NewsTicker() {
   const newsText = useRef<HTMLDivElement | null>(null);
-  let xPercent = 0;
+  const xPercent = 0;
   const animationDuration = 20;
 
   useEffect(() => {

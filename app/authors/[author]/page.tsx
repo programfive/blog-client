@@ -1,4 +1,3 @@
-import formatString from "@/app/functions/formatString";
 import { getArticles } from "@/app/functions/getArticles";
 import PostNavigation from "@/components/PostNavigation";
 import SocialSharing from "@/components/SocialSharing";
