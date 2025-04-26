@@ -25,7 +25,10 @@ type ArticleData = {
   label: string;
   slug: string;
 };
-
+type AuthorPageProps = {
+  params: { author: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
 export async function generateMetadata({
   params,
 }: {
@@ -50,11 +53,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function AuthorDetails({
-  params,
-}: {
-  params: { author: string };
-}) {
+export default async function AuthorDetails({ params }: AuthorPageProps) {
   try {
     const authors: AuthorData[] = await getArticles();
 
