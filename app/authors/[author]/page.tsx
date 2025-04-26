@@ -1,6 +1,7 @@
 import { getArticles } from "@/app/functions/getArticles";
 import PostNavigation from "@/components/PostNavigation";
 import SocialSharing from "@/components/SocialSharing";
+import type { Metadata } from 'next'
 import Link from "next/link";
 
 type AuthorData = {
@@ -25,17 +26,15 @@ type ArticleData = {
   label: string;
   slug: string;
 };
-type AuthorPageProps = {
+type Props = {
   params: { author: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 }
-export async function generateMetadata({
-  params,
-}: {
-  params: { author: string };
-}) {
-  const authors: AuthorData[] = await getArticles();
 
+export async function generateMetadata(
+  { params }: Props,
+): Promise<Metadata> {
+  const authors: AuthorData[] = await getArticles();
   const decodedAuthor = decodeURIComponent(params.author);
 
   const authorData = authors.find(
@@ -53,7 +52,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function AuthorDetails({ params }: AuthorPageProps) {
+export default async function AuthorDetails({
+  params,
+}: {
+  params: { author: string };
+}) {
   try {
     const authors: AuthorData[] = await getArticles();
 
