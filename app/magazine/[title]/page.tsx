@@ -2,42 +2,45 @@ import { ArticleType, getArticles } from "@/app/functions/getArticles";
 import PostNavigation from "@/components/PostNavigation";
 import SocialSharing from "@/components/SocialSharing";
 import Subheading from "@/components/Subheading";
+import { Metadata } from "next";
 import Link from "next/link";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { title: string };
-}) {
+
+type Params = Promise<{ title: string }>;
+export async function generateMetadata(props: { params: Params }): Promise<Metadata> {
   const articles: ArticleType[] = await getArticles();
+  const params = await props.params;
+  const { title } = params;
 
   const articleData = articles.find((article) =>
-    article.articles.find((articleItem) => articleItem.slug === params.title)
+    article.articles.some((articleItem) => articleItem.slug === title)
   );
 
   if (!articleData) {
-    return <p>Article not found</p>;
+    return {
+      title: 'Artículo no encontrado',
+    };
   }
 
   const matchingArticle = articleData.articles.find(
-    (articleItem) => articleItem.slug === params.title
+    (articleItem) => articleItem.slug === title
   );
 
   return {
-    title: `${matchingArticle?.title} | Fyrre Magazine`,
+    title: matchingArticle?.title || 'Artículo',
+    description: matchingArticle?.description,
   };
 }
 
-export default async function ArticleDetails({
-  params,
-}: {
-  params: { title: string };
-}) {
+export default async function ArticleDetails(props: { params: Params }) {
+  const params = await props.params;
+  const { title } = params;
   try {
     const articles: ArticleType[] = await getArticles();
+  
 
     const articleData = articles.find((article) =>
-      article.articles.find((articleItem) => articleItem.slug === params.title)
+      article.articles.find((articleItem) => articleItem.slug === title)
     );
 
     if (!articleData) {
@@ -45,7 +48,7 @@ export default async function ArticleDetails({
     }
 
     const matchingArticle = articleData.articles.find(
-      (articleItem) => articleItem.slug === params.title
+      (articleItem) => articleItem.slug === title
     );
 
     const latestArticles = articles

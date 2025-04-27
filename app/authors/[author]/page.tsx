@@ -26,16 +26,12 @@ type ArticleData = {
   label: string;
   slug: string;
 };
-type Props = {
-  params: { author: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-export async function generateMetadata(
-  { params }: Props,
-): Promise<Metadata> {
+export type paramsType = Promise<{ author: string }>;
+export async function generateMetadata(props: { params: paramsType }): Promise<Metadata> {
   const authors: AuthorData[] = await getArticles();
-  const decodedAuthor = decodeURIComponent(params.author);
+  const params = await props.params;
+  const { author } = params;
+  const decodedAuthor = decodeURIComponent(author);
 
   const authorData = authors.find(
     (author: AuthorData) => author.slug === decodedAuthor
@@ -51,16 +47,12 @@ export async function generateMetadata(
     title: `${authorData.author} | Fyrre Magazine`,
   };
 }
-
-export default async function AuthorDetails({
-  params,
-}: {
-  params: { author: string };
-}) {
+export default async function AuthorDetails(props: { params: paramsType }) {
   try {
     const authors: AuthorData[] = await getArticles();
-
-    const decodedAuthor = decodeURIComponent(params.author);
+    const params = await props.params;
+    const { author } = params;
+    const decodedAuthor = decodeURIComponent(author);
 
     const authorData = authors.find(
       (author: AuthorData) => author.slug === decodedAuthor
