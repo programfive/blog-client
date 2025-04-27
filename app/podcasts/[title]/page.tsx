@@ -27,17 +27,12 @@ type ArticleData = {
   slug: string;
 };
 
-type Props = {
-  params: { title: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+type Params = Promise<{ title: string }>;
+export async function generateMetadata(props: { params: Params }): Promise<Metadata> {
   const articles: AuthorData[] = await getArticles();
-  const title = params.title;
+  const params = await props.params;
+  const { title } = params;
+
 
   const articleData = articles.find((article) =>
     article.articles.find((articleItem) => articleItem.slug === title)
@@ -58,10 +53,11 @@ export async function generateMetadata(
   };
 }
 
-export default async function ArticleDetails({ params }: Props) {
+export default async function ArticleDetails(props: { params: Params }) {
   try {
     const articles: AuthorData[] = await getArticles();
-    const title = params.title;
+    const params = await props.params;
+    const { title } = params;
 
     const articleData = articles.find((article) =>
       article.articles.find((articleItem) => articleItem.slug === title)
